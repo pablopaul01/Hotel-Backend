@@ -10,6 +10,7 @@ const passport = require ("passport")
 
 const app = express();
 
+
 //midleware
 app.use(cors());
 app.options('*', cors())
