@@ -2,8 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-const router = require("./routes")
 const dbConnection = require("./database/db");
+const router = require("./routes");
 // const cloudinary = require("cloudinary").v2;
 // const jwtStrategy = require ("./passport/jwt")
 // const passport = require ("passport")
@@ -16,6 +16,9 @@ app.options('*', cors())
 app.use(express.json())
 app.use(express.urlencoded({extended: false}));
 app.use(morgan("dev"));
+
+
+app.use("/", router);
 
 
 //conexion base de datos

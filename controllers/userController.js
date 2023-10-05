@@ -1,14 +1,28 @@
-const User = require("../controllers/userSchema.js");
+const User = require("../models/userSchema.js");
 
-const getAllUsers = (req, res) => {
+const getAllUsers = async (req, res) => {
 
+    const users = await User.find()
+
+    try {
+        res.status(201).json({
+            mensaje: "Los usuarios se encontraron exitosamente",
+            status: 201,
+            users
+        })        
+    } catch (error) {
+        return res.status(500).json({
+            mensaje: "Hubo un error, intente más tarde",
+            status: 500
+        })
+    }
 }
 
 const register = async (req, res) => {
 
-    const { name, username, password,  } = req.body;
+    const { name, username, password, dni, cellPhone } = req.body;
     
-    await User.findOne({username});
+    // await User.findOne({username});
     
     try {
         const newUser = new User({
@@ -30,4 +44,12 @@ const register = async (req, res) => {
             status: 500
         })
     }
+}
+
+
+
+
+module.exports = {
+    register,
+    getAllUsers
 }
