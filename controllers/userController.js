@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models/userSchema.js");
-const { encryptPassword } = require("../utils/passwordHandler.js");
+const { encryptPassword, comparePassword } = require("../utils/passwordHandler.js");
+const jwt = require("jsonwebtoken");
 
 const getAllUsers = async (req, res) => {
 
@@ -121,7 +122,28 @@ const deleteUser = async (req, res) => {
         return res.status(500).json({
             mensaje: "Hubo un error, intente más tarde",
             status: 500,
-            error
+        })
+    }
+}
+
+const login = async (req, res) => {
+    const { username, password } = req.body;
+
+    const user = await User.findOne(username);
+    const secret = process.env.JWT_SECRET;
+
+    try {
+        if (!user) {
+            return res.status(404).json({
+                mensaje: "Usuario no encontrado",
+                status: 404
+            })
+        }
+        comparePassword
+    } catch (error) {
+        return res.status(500).json({
+            mensaje: "Hubo un error, intente más tarde",
+            status: 500,
         })
     }
 }

@@ -5,7 +5,13 @@ const encryptPassword = (password) => {
     return hash
 }
 
+const comparePassword = (password, hash) => {
+    const isValid = bcrypt.compareSync(password, hash);
+    return isValid;
+}
+
 
 module.exports = {
-    encryptPassword
+    encryptPassword,
+    comparePassword
 }
