@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true,
         trim: true,
-        unique: true
     },
     password: {
         type: String,
@@ -21,7 +20,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
         require: true
     },
-    cellPhone: {
+    phone: {
         type: Number,
         require: true
     },
