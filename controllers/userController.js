@@ -172,7 +172,8 @@ const login = async (req, res) => {
 
 const userUpdate = async (req, res) => {
     const { id } = req.params;
-    const { name, username, password, dni, phone } = req.body
+    const { name, password, dni, phone } = req.body
+    const secret = process.env.JWT_SECRET;
 
     try {
         if (!mongoose.isValidObjectId(id)) {
@@ -186,7 +187,6 @@ const userUpdate = async (req, res) => {
             const user = await User.findByIdAndUpdate(id, {
                 ...req.body,
                 name,
-                username,
                 dni,
                 phone,
                 password: encryptPassword(password)
@@ -198,26 +198,74 @@ const userUpdate = async (req, res) => {
                     status: 404
                 })
             }
+            const payload = {
+                sub: user._id,
+                username: user.username,
+                name: user.name,
+                role: user.role,
+                dni: user.dni,
+                phone: user.phone
+            }
+
+            const token = jwt.sign(payload, secret, { algorithm: process.env.ALGORITHM });
+
             return res.status(200).json({
                 mensaje: "Usuario modificado correctamente",
                 status: 200,
-                user
+                token
             })
         }
 
         const user = await User.findByIdAndUpdate(id, {
             ...req.body,
             name,
-            username,
             dni,
             phone
         }, { new: true });
+
+        const payload = {
+            sub: user._id,
+            username: user.username,
+            name: user.name,
+            role: user.role,
+            dni: user.dni,
+            phone: user.phone
+        }
+
+        const token = jwt.sign(payload, secret, { algorithm: process.env.ALGORITHM });
+
         return res.status(200).json({
             mensaje: "Usuario modificado correctamente",
             status: 200,
-            user
+            token
         })
 
+
+    } catch (error) {
+        return res.status(500).json({
+            mensaje: "Hubo un error, intente más tarde",
+            status: 500,
+        })
+    }
+}
+
+const changeToAdmin = async (req, res) => {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    try {
+        if (!user) {
+            return res.status(404).json({
+                mensaje: "Usuario no encontrado",
+                status: 404
+            })
+        }
+        user.role = "admin";
+        await user.save();
+        return res.status(200).json({
+            mensaje: "El usuario ahora es admin",
+            status: 200,
+            user
+        })
 
     } catch (error) {
         return res.status(500).json({
@@ -236,5 +284,6 @@ module.exports = {
     getUserById,
     deleteUser,
     login,
-    userUpdate
+    userUpdate,
+    changeToAdmin
 }
