@@ -142,13 +142,13 @@ const login = async (req, res) => {
             })
         }
         if (user.state === false) {
-            res.status(404).json({
+            return res.status(404).json({
                 mensaje: "El usuario tiene la cuenta suspendida",
                 status: 404
             })
         }
         if (!comparePassword(password, user.password)) {
-            res.status(400).json({
+            return res.status(400).json({
                 mensaje: "La contraseña es incorrecta",
                 status: 400
             })
@@ -169,9 +169,10 @@ const login = async (req, res) => {
             token
         })
     } catch (error) {
+        console.log(error)
         return res.status(500).json({
             mensaje: "Hubo un error, intente más tarde",
-            status: 500,
+            status: 500
         })
     }
 }
