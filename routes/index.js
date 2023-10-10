@@ -21,7 +21,6 @@ router.delete("/categoria/:id", deleteCategorie);
 router.get("/categoria/:id", getCategorieById);
 router.put("/categoria/:id", updateCategorie);
 router.delete("/categoria/:id/room/:roomId", deleteRoomFromCategory);
-// router.post("/login", login);
 router.put("/categoria/rooms/:id", addRoomNumber);
 
 module.exports = router; 
