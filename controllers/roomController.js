@@ -147,7 +147,7 @@ const updateCategorie = async (req, res) => {
         return res.status(200).json({
             mensaje: "Categoria actualizada correctamente",
             status: 200,
-            curso
+            categorie
         })
     } catch (error) {
         return  res.status(500).json({
@@ -157,10 +157,82 @@ const updateCategorie = async (req, res) => {
     }
 }
 
+const addRoomNumber = async (req, res) => {
+    const { id } = req.params; 
+    const { number, unavailableDates } = req.body; 
+    console.log(number)
+    try {
+        const category = await Categories.findById(id);
+
+        if (!category) {
+            return res.status(404).json({
+                mensaje: "Categoría no encontrada",
+                status: 404
+            });
+        }
+        category.roomNumbers.push({ number, unavailableDates });
+
+        await category.save();
+
+        return res.status(200).json({
+            mensaje: "Número de habitación agregado correctamente",
+            status: 200,
+            category
+        });
+    } catch (error) {
+        return res.status(500).json({
+            mensaje: "Hubo un error, inténtelo más tarde",
+            status: 500
+        });
+    }
+};
+
+
+const deleteRoomFromCategory = async (req, res) => {
+    const { id, roomId } = req.params;
+
+    try {
+        const category = await Categories.findById(id);
+
+        if (!category) {
+            return res.status(404).json({
+                mensaje: "Categoría no encontrada",
+                status: 404
+            });
+        }
+        console.log(category.roomNumbers)
+        console.log(roomId)
+        const roomIndex = category.roomNumbers.findIndex(room => room.id === roomId);
+
+        if (roomIndex === -1) {
+            return res.status(404).json({
+                mensaje: "Número de habitación no encontrado en la categoría",
+                status: 404
+            });
+        }
+
+        category.roomNumbers.splice(roomIndex, 1);
+        await category.save();
+
+        return res.status(200).json({
+            mensaje: "Habitación eliminada correctamente",
+            status: 200,
+            category
+        });
+    } catch (error) {
+        return res.status(500).json({
+            mensaje: "Hubo un error, inténtelo más tarde",
+            status: 500
+        });
+    }
+}
+
   module.exports = {
     createRoom,
     getCategories,
     deleteCategorie,
     getCategorieById,
-    updateCategorie
+    updateCategorie,
+    addRoomNumber,
+    deleteRoomFromCategory
   }
