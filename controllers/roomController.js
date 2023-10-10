@@ -1,12 +1,12 @@
 const Categories = require("../models/roomSchema")
 const cloudinary = require("cloudinary").v2
+const fs = require('fs');
+const mongoose = require("mongoose");
 
 const createRoom = async (req, res) => {
     const { title, capacidadMax, descripcion, precio, roomNumbers } = req.body;
-    console.log("roomNumbers", roomNumbers);
-    // const { path } = req.file;
     const room = await Categories.findOne({ title });
-    // const cloudimg = await cloudinary.uploader.upload(path)
+    const imagenes = [];
     try {
         if (room) {
             return res.status(400).json({
@@ -14,12 +14,19 @@ const createRoom = async (req, res) => {
                 status: 400
             })
         }
+        for (const file of req.files) {
+            const result = await cloudinary.uploader.upload(file.path);
+            imagenes.push({
+                url: result.secure_url
+            });
+        }
+
         const newRoom = new Categories({
             title,
             capacidadMax,
             descripcion,
             precio,
-            // imagen: cloudimg.secure_url,
+            imagenes,
             roomNumbers,
         })
         await newRoom.save();
@@ -32,7 +39,7 @@ const createRoom = async (req, res) => {
         return res.status(500).json({
             mensaje: "Hubo un error, intente más tarde",
             status: 500,
-            error
+            error: error.message
         })
     }
 }
@@ -67,12 +74,6 @@ const deleteCategorie = async (req, res) => {
     const categorie = await Categories.findByIdAndDelete(id);
 
     try {
-        if (!mongoose.isValidObjectId(id)) {
-            return res.status(400).json({
-                mensaje: "Id de la categoria no válido",
-                status: 400
-            })
-        }
         if (!categorie) {
             return res.status(404).json({
                 mensaje: "Categoria no encontrada",
@@ -123,12 +124,6 @@ const updateCategorie = async (req, res) => {
     const { id } = req.params;
     const { title, capacidadMax, descripcion, precio, roomNumbers } = req.body
     try {
-        // if (!mongoose.isValidObjectId(id)){
-        //     return res.status(400).json({
-        //         mensaje: "El id no es valido",
-        //         status: 400
-        //     })
-        // }
         const categorie = await Categories.findByIdAndUpdate(id,{
             title,
             capacidadMax,

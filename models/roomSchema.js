@@ -16,13 +16,11 @@ const roomSchema = new mongoose.Schema({
     precio: {
         type: Number,
     },
-    imagen: [
-        {
-          img: {
-            type: String, 
-          }
-        }
-      ],
+    imagenes: [
+      {
+          url: String, 
+      }
+  ],
     roomNumbers: [{ number: Number, unavailableDates: {type: [Date]}}],
 });
 

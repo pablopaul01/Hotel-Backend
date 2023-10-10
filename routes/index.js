@@ -18,7 +18,7 @@ const upload = require("../middlewares/multer")
 router.post("/crear/categoria", upload.array("imagen", 5), createRoom);
 router.get("/categorias", getCategories);
 router.delete("/categoria/:id", deleteCategorie);
-router.get("/categoria/:id", getCategorieById);
+router.get("/categoria/:id", getCategorieById); //publica
 router.put("/categoria/:id", updateCategorie);
 router.delete("/categoria/:id/room/:roomId", deleteRoomFromCategory);
 router.put("/categoria/rooms/:id", addRoomNumber);
