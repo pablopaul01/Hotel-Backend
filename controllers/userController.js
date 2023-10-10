@@ -62,7 +62,7 @@ const getUserById = async (req, res) => {
 
 const register = async (req, res) => {
 
-    const { name, username, password, dni, phone } = req.body;
+    const { name, username, password, dni, phone, role, state } = req.body;
 
     const user = await User.findOne({ username });
 
@@ -79,6 +79,8 @@ const register = async (req, res) => {
             password: encryptPassword(password),
             dni,
             phone,
+            role,
+            state
         })
         await newUser.save();
         return res.status(201).json({
@@ -139,24 +141,28 @@ const login = async (req, res) => {
                 status: 404
             })
         }
+        if (user.state === false) {
+            res.status(404).json({
+                mensaje: "El usuario tiene la cuenta suspendida",
+                status: 404
+            })
+        }
         if (!comparePassword(password, user.password)) {
             res.status(400).json({
                 mensaje: "La contraseña es incorrecta",
                 status: 400
             })
         }
-
         const payload = {
             sub: user._id,
             username: user.username,
             name: user.name,
             role: user.role,
             dni: user.dni,
-            phone: user.phone
+            phone: user.phone,
+            state: user.state
         }
-
         const token = jwt.sign(payload, secret, { algorithm: process.env.ALGORITHM });
-
         return res.status(200).json({
             mensaje: "Inicio de sesión exitoso",
             status: 200,
@@ -170,9 +176,48 @@ const login = async (req, res) => {
     }
 }
 
+const userDisabled = async (req, res) => {
+    const { id } = req.params;
+    const { state } = await User.findById(id)
+
+    try {
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({
+                mensaje: "ID de usuario no válido o no encontrado",
+                status: 400
+            });
+        }
+
+        const user = await User.findByIdAndUpdate(id, {
+            state: !state
+        }, { new: true });
+
+
+        if (!user) {
+            return res.status(404).json({
+                mensaje: "Usuario no encontrado",
+                status: 404
+            });
+        }
+
+        return res.status(200).json({
+            mensaje: "Estado del usuario actualizado exitosamente",
+            status: 200,
+            user
+        });
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            mensaje: "Hubo un error, intente más tarde",
+            status: 500,
+        })
+    }
+};
+
 const userUpdate = async (req, res) => {
     const { id } = req.params;
-    const { name, password, dni, phone } = req.body
+    const { name, password, dni, phone, state } = req.body
     const secret = process.env.JWT_SECRET;
 
     try {
@@ -189,6 +234,7 @@ const userUpdate = async (req, res) => {
                 name,
                 dni,
                 phone,
+                state,
                 password: encryptPassword(password)
             }, { new: true });
 
@@ -204,7 +250,8 @@ const userUpdate = async (req, res) => {
                 name: user.name,
                 role: user.role,
                 dni: user.dni,
-                phone: user.phone
+                phone: user.phone,
+                state: user.state
             }
 
             const token = jwt.sign(payload, secret, { algorithm: process.env.ALGORITHM });
@@ -229,7 +276,8 @@ const userUpdate = async (req, res) => {
             name: user.name,
             role: user.role,
             dni: user.dni,
-            phone: user.phone
+            phone: user.phone,
+            state: user.state
         }
 
         const token = jwt.sign(payload, secret, { algorithm: process.env.ALGORITHM });
@@ -285,5 +333,6 @@ module.exports = {
     deleteUser,
     login,
     userUpdate,
-    changeToAdmin
+    changeToAdmin,
+    userDisabled
 }

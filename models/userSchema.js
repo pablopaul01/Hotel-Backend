@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "user",
         enum: ["user", "admin"]
+    },
+    state: {
+        type: Boolean,
+        default: true,
     }
 });
 
