@@ -15,7 +15,7 @@ router.put("/admin/:id", authenticateAdmin, changeToAdmin);
 const upload = require("../middlewares/multer")
 
 //rutas de roos
-router.post("/crear/categoria",authenticateAdmin, upload.array("imagen", 5), createRoom);
+router.post("/crear/categoria",authenticateAdmin, upload.array("imagenes", 5), createRoom);
 router.get("/categorias",authenticateUser, getCategories);
 router.delete("/categoria/:id",authenticateAdmin, deleteCategorie);
 router.get("/categoria/:id", getCategorieById); //publica
