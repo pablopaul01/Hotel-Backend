@@ -169,7 +169,7 @@ const login = async (req, res) => {
             token
         })
     } catch (error) {
-        console.log(error)
+       
         return res.status(500).json({
             mensaje: "Hubo un error, intente más tarde",
             status: 500
@@ -208,7 +208,7 @@ const userDisabled = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error)
+       
         return res.status(500).json({
             mensaje: "Hubo un error, intente más tarde",
             status: 500,
