@@ -27,7 +27,7 @@ const createRoom = async (req, res) => {
             descripcion,
             precio,
             imagenes,
-            roomNumbers,
+            roomNumbers: JSON.parse(roomNumbers),
         })
         await newRoom.save();
         return res.status(201).json({
