@@ -2,9 +2,7 @@ const passport = require('passport');
 
 const authenticateAdmin = (req, res, next) => {
     passport.authenticate("jwt", (err, user, info) => {
-        console.log("passport", user);
-        console.log("passport", err);
-        console.log("passport", info);
+       
         if (err) {
             return res.status(500).json({
                 mensaje: "Error al autenticar el usuario",
