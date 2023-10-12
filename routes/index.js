@@ -17,7 +17,7 @@ router.put("/desactivar/usuario/:id", authenticateAdmin, userDisabled);
 const upload = require("../middlewares/multer")
 
 //rutas de rooms
-router.post("/crear/categoria",authenticateAdmin, upload.array("imagen", 5), createRoom);
+router.post("/crear/categoria",authenticateAdmin, upload.array("imagenes", 5), createRoom);
 router.get("/categorias", getCategories);
 router.delete("/categoria/:id",authenticateAdmin, deleteCategorie);
 router.get("/categoria/:id", getCategorieById); //publica
