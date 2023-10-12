@@ -55,21 +55,19 @@ Para loguearse y obtener el token de autenticacion:
 POST     /login
 ```
 
-#### Categorias Routes
+#### Categorias y habitaciones Routes
+
 
 ```
-GET     /api/v1/categorias
-POST     /api/v1/categoria
+GET      /categorias
+GET      /categoria/:id
+POST     /crear/categoria
+PUT      /categoria/:id
+PUT      /categoria/rooms/:id
+DELETE   /categoria/:id
+DELETE   /categoria/:id/room/:roomId
 ```
 
-#### Cursos Routes
-
-```
-GET     /api/v1/cursos
-POST     /api/v1/curso
-DELETE     /api/v1/curso/:id
-PUT     /api/v1/curso/:id
-```
 
 # Tecnologia Principal
 * [NodeJS](https://nodejs.org/es/) - FrameWork Back-End
@@ -87,8 +85,11 @@ PUT     /api/v1/curso/:id
 * [multer](https://www.npmjs.com/package/multer) - Manejo de archivos en NodeJS
 * [cloudinary](https://cloudinary.com/documentation/node_integration) - Almacenamiento de imagenes y videos
 
+
+
 # Base de Datos
 * [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) - Cloud
+
 
 
 ## Autores ✒️
