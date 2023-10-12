@@ -26,4 +26,5 @@ router.delete("/categoria/:id/room/:roomId",authenticateAdmin, deleteRoomFromCat
 router.put("/categoria/rooms/:id",authenticateAdmin, addRoomNumber);
 router.put("/categoria/:id/room/:roomId",authenticateAdmin, reserveRoomFromCategory);
 
+
 module.exports = router; 
