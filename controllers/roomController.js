@@ -222,6 +222,32 @@ const deleteRoomFromCategory = async (req, res) => {
     }
 }
 
+const reserveRoomFromCategory = async (req, res) => {
+    const { id, roomId } = req.params;
+    const { date } = req.body; // Asumiendo que el timestamp es enviado en el body
+    
+    try {
+      const updatedCategory = await Categories.findByIdAndUpdate(
+        id,
+        {
+          $addToSet: { 'roomNumbers.$[room].unavailableDates': new Date(date) }
+        },
+        {
+          new: true,
+          arrayFilters: [{ 'room._id': roomId }]
+        }
+      );
+  
+      if (!updatedCategory) {
+        return res.status(404).json({ message: 'Categoría no encontrada' });
+      }
+  
+      res.status(200).json({ message: 'Fecha de reserva añadida con éxito' });
+    } catch (error) {
+      res.status(500).json({ message: 'Hubo un error al procesar la solicitud', error: error.message });
+    }
+}
+
   module.exports = {
     createRoom,
     getCategories,
@@ -229,5 +255,6 @@ const deleteRoomFromCategory = async (req, res) => {
     getCategorieById,
     updateCategorie,
     addRoomNumber,
-    deleteRoomFromCategory
+    deleteRoomFromCategory,
+    reserveRoomFromCategory
   }
