@@ -224,8 +224,8 @@ const deleteRoomFromCategory = async (req, res) => {
 
 const reserveRoomFromCategory = async (req, res) => {
     const { id, roomId } = req.params;
-    const { date } = req.body; // Asumiendo que el timestamp es enviado en el body
-    
+    const { date } = req.body; 
+    console.log("Fecha recibida:", date);
     try {
       const updatedCategory = await Categories.findByIdAndUpdate(
         id,
