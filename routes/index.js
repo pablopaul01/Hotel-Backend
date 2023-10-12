@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { register, getAllUsers, getUserById, deleteUser, login, userUpdate, changeToAdmin, userDisabled } = require("../controllers/userController");
-const { createRoom,getCategories, deleteCategorie, getCategorieById,updateCategorie, addRoomNumber, deleteRoomFromCategory } = require("../controllers/roomController");
+const { createRoom,getCategories, deleteCategorie, getCategorieById,updateCategorie, addRoomNumber, deleteRoomFromCategory, reserveRoomFromCategory} = require("../controllers/roomController");
 const authenticateAdmin = require("../middlewares/authAdmin");
 const authenticateUser = require("../middlewares/authUser");
 
@@ -24,5 +24,6 @@ router.get("/categoria/:id", getCategorieById); //publica
 router.put("/categoria/:id",authenticateAdmin, updateCategorie);
 router.delete("/categoria/:id/room/:roomId",authenticateAdmin, deleteRoomFromCategory);
 router.put("/categoria/rooms/:id",authenticateAdmin, addRoomNumber);
+router.put("/categoria/:id/room/:roomId",authenticateAdmin, reserveRoomFromCategory);
 
 module.exports = router; 
