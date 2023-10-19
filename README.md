@@ -93,7 +93,7 @@ POST      /formulario
 * [cors](https://www.npmjs.com/package/cors) - Control de Acceso HTTP
 * [multer](https://www.npmjs.com/package/multer) - Manejo de archivos en NodeJS
 * [cloudinary](https://cloudinary.com/documentation/node_integration) - Almacenamiento de imagenes y videos
-
+* [Nodemailer](https://nodemailer.com/) - Envios de mail
 
 
 # Base de Datos
