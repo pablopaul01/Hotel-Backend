@@ -1,5 +1,5 @@
 const Form = require("../models/formSchema.js");
-const sendEmail = require("../utils/emailHandler.js");
+const sendEmailForm = require("../utils/emailHandler.js");
 
 
 const sendForm = async (req, res) => {
@@ -15,7 +15,7 @@ const sendForm = async (req, res) => {
             description
         })
         await newForm.save();
-        sendEmail(newForm);
+        sendEmailForm(newForm);
         return res.status(201).json({
             mensaje: "Formulario enviado correctamente",
             status: 201,

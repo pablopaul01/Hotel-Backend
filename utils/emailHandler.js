@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer')
+const templateConfirm = require('./templateConfirm')
 
-const sendEmail = async (newForm) => {
+const sendEmailForm = async (newForm) => {
     const transporter = nodemailer.createTransport({
         service: "gmail",
         port: 587,
@@ -43,12 +44,34 @@ const formTemplate = (newForm) => {
     }
 }
 
-module.exports = sendEmail
-// const reserveTemplate = (newUser) => {
-//     return {
-//         from: "francogiacobbe700@gmail.com",
-//         to: newUser.username,
-//         subject: "Reserva Exitosa",
-//         text: ""
-//     }
-// }
+const sendEmailConfirm = async (data) => {
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        port: 587,
+        auth: {
+            user: "francogiacobbe700@gmail.com",
+            pass: "agyf ddzh dckv sldt"
+        }
+    })
+
+    try {
+        const info = await transporter.sendMail(confirmTemplate(data));
+        console.log(info);
+        return info;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+
+const confirmTemplate = (data) => {
+    
+    return {
+        from: "francogiacobbe700@gmail.com",
+        to: user.username,
+        subject: "Consulta Rolling Gran Hotel",
+        html: templateConfirm(data)
+    }
+}
+
+module.exports = { sendEmailForm, sendEmailConfirm }
