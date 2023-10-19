@@ -1,6 +1,7 @@
 
 
 const templateConfirm = (data) => {
+ 
     const { user, nights, adults, kids, rooms, priceNight, price, category } = data
     const fecha = new Date()
     const fechaActual = fecha.toLocaleDateString();
@@ -67,18 +68,18 @@ const templateConfirm = (data) => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>${category}</td>
+                            <td>${category.title}</td>
                             <td>${nights}</td>
                             <td>${rooms}</td>
                             <td>${adults}</td>
                             <td>${kids}</td>
-                            <td>${priceNight}</td>
+                            <td>$${priceNight}</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <h2>Total</h2>
-                <p><strong>Total a Pagar:</strong>${price}</p>
+                <p><strong>Total a Pagar:</strong>$${price}</p>
             </div>
             <p>
             Si tiene una pregunta general sobre su estadía en Rolling Gran Hotel, le invitamos a explorar nuestro sitio web <a href="https://rolling-hotel.netlify.app/">RollinGranHotel</a> para ver información más detallada al respecto.</p>

@@ -13,7 +13,7 @@ const sendEmailForm = async (newForm) => {
 
     try {
         const info = await transporter.sendMail(formTemplate(newForm));
-        console.log(info);
+       
         return info;
     } catch (err) {
         console.error(err);
@@ -56,7 +56,7 @@ const sendEmailConfirm = async (data) => {
 
     try {
         const info = await transporter.sendMail(confirmTemplate(data));
-        console.log(info);
+        
         return info;
     } catch (err) {
         console.error(err);
@@ -68,8 +68,8 @@ const confirmTemplate = (data) => {
     
     return {
         from: "francogiacobbe700@gmail.com",
-        to: user.username,
-        subject: "Consulta Rolling Gran Hotel",
+        to: data.user.username,
+        subject: "Confirmación de reserva Rolling Gran Hotel",
         html: templateConfirm(data)
     }
 }

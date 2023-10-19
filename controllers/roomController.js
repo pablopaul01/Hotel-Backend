@@ -133,7 +133,7 @@ const updateCategorie = async (req, res) => {
             roomNumbers,
         }, { new: true })
 
-        console.log(categorie)
+    
         if (!categorie) {
             return res.status(404).json({
                 mensaje: "Categoria no encontrado",
@@ -156,7 +156,7 @@ const updateCategorie = async (req, res) => {
 const addRoomNumber = async (req, res) => {
     const { id } = req.params;
     const { number, unavailableDates } = req.body;
-    console.log(number)
+    
     try {
         const category = await Categories.findById(id);
 
@@ -196,8 +196,7 @@ const deleteRoomFromCategory = async (req, res) => {
                 status: 404
             });
         }
-        console.log(category.roomNumbers)
-        console.log(roomId)
+     
         const roomIndex = category.roomNumbers.findIndex(room => room.id === roomId);
 
         if (roomIndex === -1) {
@@ -227,7 +226,6 @@ const reserveRoomFromCategory = async (req, res) => {
     const { id, roomId } = req.params;
     const { date } = req.body;
     const data = req.body;
-    console.log("Fecha recibida:", date);
     try {
         const updatedCategory = await Categories.findByIdAndUpdate(
             id,

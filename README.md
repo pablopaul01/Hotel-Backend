@@ -69,6 +69,15 @@ DELETE   /categoria/:id/room/:roomId
 ```
 
 
+#### Envio de formulario con respuesta por email
+
+
+```
+POST      /formulario
+```
+
+
+
 # Tecnologia Principal
 * [NodeJS](https://nodejs.org/es/) - FrameWork Back-End
 
