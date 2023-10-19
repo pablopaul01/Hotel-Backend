@@ -2,6 +2,7 @@ const Categories = require("../models/roomSchema")
 const cloudinary = require("cloudinary").v2
 const fs = require('fs');
 const mongoose = require("mongoose");
+const { sendEmailConfirm } = require("../utils/emailHandler");
 
 const createRoom = async (req, res) => {
     const { title, capacidadMax, descripcion, precio, roomNumbers } = req.body;
@@ -124,28 +125,28 @@ const updateCategorie = async (req, res) => {
     const { id } = req.params;
     const { title, capacidadMax, descripcion, precio, roomNumbers } = req.body
     try {
-        const categorie = await Categories.findByIdAndUpdate(id,{
+        const categorie = await Categories.findByIdAndUpdate(id, {
             title,
             capacidadMax,
             descripcion,
             precio,
             roomNumbers,
-        }, {new: true})
+        }, { new: true })
 
         console.log(categorie)
-        if (!categorie){
-                return res.status(404).json({
-                    mensaje: "Categoria no encontrado",
-                    status:404
-                })
-            }
+        if (!categorie) {
+            return res.status(404).json({
+                mensaje: "Categoria no encontrado",
+                status: 404
+            })
+        }
         return res.status(200).json({
             mensaje: "Categoria actualizada correctamente",
             status: 200,
             categorie
         })
     } catch (error) {
-        return  res.status(500).json({
+        return res.status(500).json({
             mensaje: "hubo un error, intentelo mas tarde",
             status: 500
         })
@@ -153,8 +154,8 @@ const updateCategorie = async (req, res) => {
 }
 
 const addRoomNumber = async (req, res) => {
-    const { id } = req.params; 
-    const { number, unavailableDates } = req.body; 
+    const { id } = req.params;
+    const { number, unavailableDates } = req.body;
     console.log(number)
     try {
         const category = await Categories.findById(id);
@@ -224,31 +225,32 @@ const deleteRoomFromCategory = async (req, res) => {
 
 const reserveRoomFromCategory = async (req, res) => {
     const { id, roomId } = req.params;
-    const { date } = req.body; 
+    const { date } = req.body;
+    const data = req.body;
     console.log("Fecha recibida:", date);
     try {
-      const updatedCategory = await Categories.findByIdAndUpdate(
-        id,
-        {
-          $addToSet: { 'roomNumbers.$[room].unavailableDates': new Date(date) }
-        },
-        {
-          new: true,
-          arrayFilters: [{ 'room._id': roomId }]
+        const updatedCategory = await Categories.findByIdAndUpdate(
+            id,
+            {
+                $addToSet: { 'roomNumbers.$[room].unavailableDates': new Date(date) }
+            },
+            {
+                new: true,
+                arrayFilters: [{ 'room._id': roomId }]
+            }
+        );
+
+        if (!updatedCategory) {
+            return res.status(404).json({ message: 'Categoría no encontrada' });
         }
-      );
-  
-      if (!updatedCategory) {
-        return res.status(404).json({ message: 'Categoría no encontrada' });
-      }
-  
-      res.status(200).json({ message: 'Fecha de reserva añadida con éxito' });
+        sendEmailConfirm(data);
+        res.status(200).json({ message: 'Fecha de reserva añadida con éxito' });
     } catch (error) {
-      res.status(500).json({ message: 'Hubo un error al procesar la solicitud', error: error.message });
+        res.status(500).json({ message: 'Hubo un error al procesar la solicitud', error: error.message });
     }
 }
 
-  module.exports = {
+module.exports = {
     createRoom,
     getCategories,
     deleteCategorie,
@@ -257,4 +259,4 @@ const reserveRoomFromCategory = async (req, res) => {
     addRoomNumber,
     deleteRoomFromCategory,
     reserveRoomFromCategory
-  }
+}
