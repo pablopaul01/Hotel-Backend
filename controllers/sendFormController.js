@@ -1,5 +1,5 @@
 const Form = require("../models/formSchema.js");
-const sendEmailForm = require("../utils/emailHandler.js");
+const { sendEmailForm } = require("../utils/emailHandler.js");
 
 
 const sendForm = async (req, res) => {
@@ -7,7 +7,7 @@ const sendForm = async (req, res) => {
     const { name, surname, username, description } = req.body;
 
 
-    try {      
+    try {
         const newForm = new Form({
             name,
             username,
