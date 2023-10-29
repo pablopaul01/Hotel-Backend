@@ -10,7 +10,7 @@ const passport = require("passport");
 
 const app = express();
 
-//midlewares
+
 app.use(cors());
 app.options('*', cors());
 app.use(express.json());
@@ -22,14 +22,14 @@ cloudinary.config({
     api_secret: process.env.API_SECRET 
   });
 
-//passport
+
 passport.use("jwt", jwtStrategy);
 
 
-//configuracion de rutas
+
 app.use("/", router);
 
-//conexion base de datos
+
 dbConnection();
 
 app.listen(8080, () => {
